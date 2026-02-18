@@ -6,7 +6,8 @@ from src.utils.responser import ApiResponse
 from src.utils.exceptions import ConflictException, UnauthorizedException
 from src.utils.email import send_welcome_email
 from .schema import SignupRequest, LoginRequest, UserResponse, AuthResponse
-from .service import create_user, get_user_by_email, authenticate_user, generate_jwt_token, UserModel
+from .service import create_user, get_user_by_email, authenticate_user, generate_jwt_token
+from src.models.user import UserModel
 from .dependencies import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Auth"])

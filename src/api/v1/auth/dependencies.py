@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 
 from src.db.database import get_db
 from src.utils.exceptions import UnauthorizedException
-from .service import verify_jwt_token, get_user_by_id, UserModel
+from .service import verify_jwt_token, get_user_by_id
+from src.models.user import UserModel
 
 # Define the security scheme
 security = HTTPBearer()

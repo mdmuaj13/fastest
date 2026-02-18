@@ -1,18 +1,22 @@
-import os
 from datetime import datetime, timezone, timedelta
 from typing import Optional
 
 import bcrypt
 import jwt
+from sqlalchemy.orm import Session
 
+from src.config import settings
+from src.models.user import UserModel
 from .schema import SignupRequest
 
 
 # ─── Configuration ───────────────────────────────────────────────────────────
 
-JWT_SECRET = os.getenv("JWT_SECRET", "change-me-in-production")
-JWT_ALGORITHM = "HS256"
-JWT_EXPIRATION_MINUTES = int(os.getenv("JWT_EXPIRATION_MINUTES", "60"))
+# ─── Configuration ───────────────────────────────────────────────────────────
+
+JWT_SECRET = settings.JWT_SECRET
+JWT_ALGORITHM = settings.JWT_ALGORITHM
+JWT_EXPIRATION_MINUTES = settings.JWT_EXPIRATION_MINUTES
 
 
 
@@ -48,17 +52,17 @@ def verify_jwt_token(token: str) -> dict:
 
 # ─── Service Functions ───────────────────────────────────────────────────────
 
-def get_user_by_email(db, email: str) -> Optional[UserModel]:
+def get_user_by_email(db: Session, email: str) -> Optional[UserModel]:
     """Find a user by email address."""
     return db.query(UserModel).filter(UserModel.email == email).first()
 
 
-def get_user_by_id(db, user_id: int) -> Optional[UserModel]:
+def get_user_by_id(db: Session, user_id: int) -> Optional[UserModel]:
     """Find a user by ID."""
     return db.query(UserModel).filter(UserModel.id == user_id).first()
 
 
-def create_user(db, data: SignupRequest) -> UserModel:
+def create_user(db: Session, data: SignupRequest) -> UserModel:
     """Create a new user with a hashed password."""
     db_user = UserModel(
         first_name=data.first_name,
@@ -72,7 +76,7 @@ def create_user(db, data: SignupRequest) -> UserModel:
     return db_user
 
 
-def authenticate_user(db, email: str, password: str) -> Optional[UserModel]:
+def authenticate_user(db: Session, email: str, password: str) -> Optional[UserModel]:
     """Authenticate a user by email and password. Returns the user or None."""
     user = get_user_by_email(db, email)
     if not user:

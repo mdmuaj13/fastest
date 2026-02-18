@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.db.database import init_db
 from src.api.v1.routes import register_v1_routes
 # Import models so they are registered with Base before init_db()
-from src.api.v1.test.service import TestModel  # noqa: F401
-from src.api.v1.auth.service import UserModel  # noqa: F401
+from src.models.test import TestModel  # noqa: F401
+from src.models.user import UserModel  # noqa: F401
 from src.utils.exceptions import (
     BadRequestException,
     ConflictException,
